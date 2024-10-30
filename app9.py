@@ -6,30 +6,33 @@ from sklearn.metrics.pairwise import cosine_similarity
 # 임베딩 모델 로드
 encoder = SentenceTransformer('jhgan/ko-sroberta-multitask')
 
-# 식당 관련 질문과 답변 데이터
+# 피부 상태 관련 질문과 답변 데이터
 questions = [
-    "영업시간이 어떻게 되나요?",
-    "가격이 어떻게 되나요?",
-    "주차가 가능한가요?",
-    "사람들이 좋아하는 메뉴는 무엇인가요?",
-    "목요일 12시에 예약 가능한가요?",
-    "메뉴가 무엇이 있나요?",
-    "위치가 어디인가요?"
+    "피부 측정이 가능한가요? 어떻게 하면 되나요?",
+    "피부 수분 상태가 어떤가요?",
+    "주름이 어느 정도 있나요?",
+    "모공 상태를 확인할 수 있나요?",
+    "피부 탄력 상태가 궁금해요.",
+    "피부 상태를 개선하려면 어떻게 해야 하나요?",
+    "추천하는 스킨케어 제품이 있나요?",
+    "현재 피부 상태를 분석해 주세요."
 ]
 
 answers = [
-    "평일 영업시간은 10:00 - 21:00, 주말은 10:00 - 22:00입니다.",
-    "메뉴 가격은 비빔밥 9000원, 김치찌개 8000원, 된장찌개 8000원, 갈비탕 12000원입니다.",
-    "네, 주차 가능합니다.",
-    "사람들이 가장 좋아하는 메뉴는 비빔밥과 갈비탕입니다.",
-    "목요일 12시에 예약 가능합니다.",
-    "메뉴에는 비빔밥, 김치찌개, 된장찌개, 갈비탕 등이 있습니다.",
-    "맛있는 한식당은 강남 국기원 사거리 삼원빌딩 1층에 있습니다."
+    "피부 측정은 세수를 하신 맨 얼굴로 사진을 찍어 업로드 해주세요",
+    "피부 수분 상태는 정상 범위로, 수분 함량이 충분합니다.",
+    "피부에 미세한 주름이 보입니다. 주름 개선을 위한 제품 사용을 추천합니다.",
+    "모공 상태는 평균적으로 양호하지만, 일부 부위에서 확대된 모공이 관찰됩니다.",
+    "피부 탄력은 평균 이상으로, 탄력이 좋은 상태입니다.",
+    "피부 수분을 높이기 위해서는 충분한 물 섭취와 보습제를 사용하세요.",
+    "피부 타입에 맞는 보습제와 주름 개선 크림을 추천합니다.",
+    "현재 얼굴 사진을 분석한 결과, 수분, 주름, 모공, 탄력 상태를 확인했습니다."
 ]
 
 # 질문 임베딩과 답변 데이터프레임 생성
 question_embeddings = encoder.encode(questions)
 df = pd.DataFrame({'question': questions, '챗봇': answers, 'embedding': list(question_embeddings)})
+
 
 # 대화 이력을 저장하기 위한 Streamlit 상태 설정
 if 'history' not in st.session_state:
@@ -48,8 +51,12 @@ def get_response(user_input):
     st.session_state.history.append({"user": user_input, "bot": answer['챗봇']})
 
 # Streamlit 인터페이스
-st.title("식당 챗봇")
-st.write("한식당에 관한 질문을 입력해보세요. 예: 영업시간이 어떻게 되나요?")
+st.title("피부 상태 측정 챗봇")
+
+# 이미지 표시
+st.image("skin.png", caption="Welcome to the Restaurant Chatbot", use_column_width=True)
+
+st.write("피부 상태에 관한 질문을 입력해보세요. 예: 피부 수분 상태가 어떤가요??")
 
 user_input = st.text_input("user", "")
 
