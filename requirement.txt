@@ -1,0 +1,3 @@
+SentenceTransformer
+pandas
+streamlit
